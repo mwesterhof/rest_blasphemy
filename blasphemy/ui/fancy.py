@@ -1,9 +1,11 @@
-from .pages import FilePage, FooPage, BarPage, DjangoAppsPage
+from . import pages as page_classes
 from .app import App
 
 
 class MyApp(App):
     pages = [
-        FilePage(),
-        DjangoAppsPage(),
+        page_classes.FilePage(),
+        page_classes.ProjectPage(),
+        page_classes.DjangoAppsPage(),
+        page_classes.DjangoSettingsPage(),
     ]

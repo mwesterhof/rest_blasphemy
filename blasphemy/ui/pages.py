@@ -1,10 +1,11 @@
 import urwid
 from .lib import Page
 from django.apps import registry
+from django.conf import settings
 
 
-import os; os.unlink('/tmp/output.txt')
 def debugger(message):
+    return
     with open('/tmp/output.txt', 'a') as outf:
         outf.write(message.rstrip() + '\n')
 
@@ -41,14 +42,15 @@ class FilePage(Page):
             raise urwid.ExitMainLoop()
 
         urwid.connect_signal(self.close_button, 'click', close_handler)
-        self.content = urwid.Columns([
-            self.close_button,
-            self.close_button
-        ])
+        self.content = self.close_button
+
+
+class ProjectPage(Page):
+    name = "Project"
 
 
 class DjangoAppsPage(Page):
-    name = "Django apps"
+    name = "Apps"
 
     def __init__(self):
         app_names = registry.apps.get_app_configs().mapping.keys()
@@ -63,4 +65,15 @@ class DjangoAppsPage(Page):
         self.content = urwid.Pile([
             create_button(name, i)
             for i, name in enumerate(app_names)
+        ])
+
+
+class DjangoSettingsPage(Page):
+    name = "Settings"
+
+    def __init__(self):
+        settings_dict = settings.__dict__
+        self.content = urwid.Pile([
+            urwid.Text(name)
+            for name in settings_dict.keys()
         ])
